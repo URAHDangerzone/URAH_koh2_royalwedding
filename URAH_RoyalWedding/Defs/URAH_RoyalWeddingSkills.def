@@ -1,0 +1,28 @@
+// King effects of Courtesy and Rhetoric for the royal wedding feast (URAH_RoyalWedding.def).
+// The stat shows the feast bonus as a king effect in the skill tooltips; the feast's success chance
+// reads the skill ranks itself (sf_wedding_skills), so keep the values of both in step.
+// Roots named by path merge into the vanilla defs (like URAH_Balance's PBM_bargain).
+
+CharacterStats
+{
+	stat cs_royal_wedding_feast_perc
+	{
+		text name = "chance for the royal wedding feast to succeed"
+	}
+}
+
+Skill.effects.CourtesySkill
+{
+	tag King
+	{
+		mod cs_royal_wedding_feast_perc = 10/20/30
+	}
+}
+
+Skill.effects.RhetoricSkill
+{
+	tag King
+	{
+		mod cs_royal_wedding_feast_perc = 5/10/15
+	}
+}

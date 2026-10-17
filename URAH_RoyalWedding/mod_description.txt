@@ -1,0 +1,9 @@
+An unmarried king can hold a royal wedding feast to find a bride among the noble ladies of his own
+court: the button sits in the empty spouse slot of the royal family window. The feast costs gold
+(more for a bigger kingdom), takes 90 seconds and succeeds by chance: base 20%, plus the king's level,
+knights at court and the king effects of Courtesy (+10/20/30%) and Rhetoric
+(+5/10/15%, shown in the skill tooltips), minus old age and war. A failed feast keeps its gold and
+the next one has to wait 5 minutes. The bride is the same as the game's own random local marriage.
+
+Needs the URAH_RoyalWedding BepInEx plugin. Multiplayer: host and guests need mod and plugin; the
+feast only shows for guests while the host runs the plugin.

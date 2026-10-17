@@ -1,0 +1,114 @@
+// URAH Royal Wedding: an unmarried king can hold a feast at court to find a wife among the noble
+// ladies of his own lands. Needs the URAH_RoyalWedding plugin, which supplies the action's code and
+// puts its button into the empty spouse slot of the royal family window.
+// The bride is made exactly like the game's own random local marriage (CharacterFactory.CreateQueen):
+// no relations, no opinion bonus, only a queen and the chance of heirs.
+
+def URAH_RoyalWeddingAction : KingdomAction
+{
+	name = "Royal wedding feast"
+	tooltip = "Hold a grand feast and invite the noble families of our {kingdom.KingdomType}, so that our {kingdom.king.title} may find a bride among the ladies of our own court.[{p}The feast costs its gold whether a bride is found or not.]"
+	icon = "Assets/UI/Elements/Actions/Icon_KingdomAction_HoldFeast.tga:Icon_KingdomAction_HoldFeast#2" //GUID:5ed4c0a7539c3524995abe3475e389b7
+	prepare_sound_effect = "event:/sound_effects/interaction/cheering"
+	prepare_duration = 90
+	prepare_status_text = "Feasting at court in search of a bride for {kingdom.king}"
+	ai_validate = false
+
+	// only the plugin's action class knows this var: a host without the plugin rejects the action
+	// before any gold is taken, instead of running a feast that cannot end in a wedding
+	condition = (urah_royal_wedding)
+
+	float fail_cooldown = 300 // seconds before the next feast after a failed one
+
+	cost
+	{
+		gold = (round(own_kingdom.S1 + 40 * own_kingdom.num_realms, 10))
+	}
+
+	prepare_message : KingdomActionMessage
+	{
+		icon = "Assets/UI/Elements/Actions/Icon_KingdomAction_HoldFeast.tga:Icon_KingdomAction_HoldFeast#2" //GUID:5ed4c0a7539c3524995abe3475e389b7
+		caption = "Royal wedding feast"
+		bool success_check = (owner.queen)
+		text completed = "[{success_check:if}Our {kingdom.king.title} found a bride|No bride was found at the feast]"
+		expire_time = 45
+	}
+
+	success_fail
+	{
+		sf_base = (20)
+		{
+			text name = "Base chance"
+		}
+		sf_king_level = (own_kingdom.king.class_level * 3)
+		{
+			text name = "Our {kingdom.king.title}'s level (x3)"
+		}
+		sf_knights = (min(court_knights * 5, 30))
+		{
+			text name = "Knights at court (x5, at most 30)"
+		}
+		// the skill ranks directly, not the king stat cs_royal_wedding_feast_perc: the stat only
+		// shows these values as king effects in the skill tooltips (URAH_RoyalWeddingSkills.def,
+		// keep both in step), a king loaded from a save may never get the skill mod applied.
+		// Not named sf_king_skills: a C# factor of that name (SuccessAndFail) would replace the expression
+		sf_wedding_skills = (10 * GetSkillRank(own_kingdom.king, "Courtesy") + 5 * GetSkillRank(own_kingdom.king, "Rhetoric"))
+		{
+			text name = "Our {kingdom.king.title}'s Courtesy and Rhetoric"
+			show_always = true // also at +0%, so players see that the skills count
+		}
+		sf_age = (own_kingdom.king.is_old * -10 + own_kingdom.king.is_venerable * -25)
+		{
+			text name = "Our {kingdom.king.title}'s age"
+		}
+		sf_war = ((own_kingdom.num_wars > 0) * -10)
+		{
+			text name = "We are at war"
+		}
+	}
+
+	outcomes
+	{
+		main success
+		{
+			message
+			{
+				text caption = "A royal wedding"
+				text text = ["The feast lasted for days, and by its end our {kingdom.king.title} had found his bride among the noble ladies of our court. The bells ring for the royal wedding!",
+							 "Between the music, the hunts and the dances, a daughter of one of our noble houses won the heart of our {kingdom.king.title}. The wedding is celebrated across the land."]
+				sprite icon = "Assets/UI/Elements/msg_icons/Icon_Message_RoyalMarriage_Positive.png:Icon_Message_RoyalMarriage_Positive#2" //GUID:20d141abc14d9784da2585cf64eb3a86
+			}
+		}
+		option fail
+		{
+			message
+			{
+				text caption = "No bride found"
+				text text = ["The guests ate and drank their fill, but none of the ladies at court caught the eye of our {kingdom.king.title}. The gold is spent.",
+							 "The feast was splendid, yet the noble families left without a match. Perhaps another feast, some time from now, will bring better fortune."]
+				sprite icon = "Assets/UI/Elements/msg_icons/Icon_Message_RoyalEvent_Negative.png:Icon_Message_RoyalEvent_Negative#2" //GUID:4bfecaf3b33f7734694cc1bfb045bb57
+			}
+		}
+	}
+
+	cancel_events
+	{
+		own_kingdom royal_new_sovereign
+		own_kingdom royal_new_spouse
+	}
+	cancelled_message_caption = "Royal wedding feast ended"
+	cancelled_message_texts
+	{
+		text royal_new_sovereign = "The feast came to an abrupt end: our {kingdom.king.title} who held it is no longer on the throne."
+		text royal_new_spouse = "The feast is no longer needed, our {kingdom.king.title} has already taken a wife."
+	}
+
+	validate_prompts
+	{
+		text _cost = "{clr:gray}Not enough gold for the feast.{/clr}"
+		text _cooldown = "{clr:red_bright}The noble families are still recovering from the last feast.{/clr}"
+		text _king_imprisoned = "{clr:red_bright}Our {kingdom.king.title} cannot hold a feast while imprisoned.{/clr}"
+		text _king_in_battle = "{clr:red_bright}Our {kingdom.king.title} cannot hold a feast in the middle of a battle.{/clr}"
+		text _searching = "{clr:red_bright}A diplomat is already searching for a spouse for our {kingdom.king.title}.{/clr}"
+	}
+}
