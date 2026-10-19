@@ -7,10 +7,13 @@ knights at court and the king effects of Courtesy (+10/20/30%) and Rhetoric
 (+5/10/15%, shown in the skill tooltips), minus old age and war. A failed feast keeps its gold and
 the next one has to wait 5 minutes. The bride is the same as the game's own random local marriage.
 
-Requires the URAH_Starter package, installed once: it brings BepInEx 5 and the URAH_Loader plugin
+Requires BepInEx 5 and the URAH_Loader plugin installed.
+Or you can just install the URAH_Starter package, it ships both:
 (unzip into the game folder, see INSTALL.md inside):
 https://github.com/URAHDangerzone/URAH_koh2_releases/releases
-The mod brings its own URAH_RoyalWedding plugin. Multiplayer: host and guests need mod and loader;
+Without it this mod does nothing.
+
+Multiplayer: host and guests need mod and loader;
 the feast only shows for guests while the host runs the plugin.
 
 WARNING: this mod contains program code. Its plugins/ folder holds a DLL (URAH_RoyalWedding.dll)
@@ -22,3 +25,5 @@ release lists the SHA-256 of every file.
 Source:
 Mod and URAH_RoyalWedding plugin: https://github.com/URAHDangerzone/URAH_koh2_royalwedding
 URAH_Loader: https://github.com/URAHDangerzone/URAH_koh2_loader
+
+Preview image: game art from Knights of Honor II: Sovereign, © Black Sea Games / THQ Nordic.

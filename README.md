@@ -30,3 +30,9 @@ cd plugin && dotnet build -c Release -p:Deploy=true
 
 Compiles against your own game install with BepInEx 5 (`GameDir`, default: Steam on Linux; pass
 `-p:GameDir=...`). `Deploy=true` copies the DLL into `BepInEx/plugins/`.
+
+## License
+
+The code, defs and texts of this repository are under the MIT License (`LICENSE`). The preview image
+(`URAH_RoyalWedding/mod_preview.png`) is art from Knights of Honor II: Sovereign, © Black Sea Games /
+THQ Nordic, and is not covered by the MIT License.
